@@ -1,0 +1,500 @@
+#######################
+# Some sensors for the Outback Mate3s
+# The solar system lives at 10.0.0.150
+# The api is: http://10.0.0.150/Dev_status.cgi?&Port=0
+# It is a json output... so, lets get some data. 
+#
+# Port 0 = Inverter (FXR - 60hz)
+# Port 1 = Charge Controller (CC - FM80)
+# Port 2 = FNDC
+#######################
+# When ready, include the appropriate file with the entities. 
+# script: !include sensors_outback_pv.yaml
+#
+# Charge Controller - get a single json element. 
+# This works. but to do more will flood the 
+# reset service and also cause multiple issues on the mate3s. 
+#  
+    
+##################
+# Mate3s Topic
+
+  - platform: mqtt
+    name: 'Mate3s Sys Batt V'
+    state_topic: "Mate3s/Sys_Batt_V" 
+    unit_of_measurement: "Vdc"
+    force_update: true
+    
+  - platform: mqtt
+    name: 'Mate3s Gateway Type'
+    state_topic: "Mate3s/Gateway_Type" 
+    
+  - platform: mqtt
+    name: 'Mate3s Sys Time Epoch'
+    state_topic: "Mate3s/Sys_Time_Epoch" 
+    unit_of_measurement: "Epoch"
+    force_update: true
+    
+  - platform: mqtt
+    name: 'Mate3s Sys Time Human'
+    state_topic: "Mate3s/Sys_Time_Human" 
+    unit_of_measurement: "Date"
+    force_update: true
+    
+# Mate3s/sysinfo topic... 
+
+  - platform: mqtt
+    name: "Mate3S PV Watts"
+    state_topic: "Mate3s/sysinfo/PV_Watts" 
+    unit_of_measurement: "Watts"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3S PV Load"
+    state_topic: "Mate3s/sysinfo/PV_Load" 
+    unit_of_measurement: "Watts"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3S CC Model"
+    #entity_id: 'sensor.mate3s_mqtt'
+    state_topic: "Mate3s/sysinfo/CC_Model" 
+    
+  - platform: mqtt
+    name: "Mate3S INV Model"
+    state_topic: "Mate3s/sysinfo/INV_Model" 
+    
+  - platform: mqtt
+    name: "Mate3S API IP Address"
+    state_topic: "Mate3s/sysinfo/MATE3S_API_IP_Address" 
+    
+    
+  - platform: mqtt
+    name: "Mate3S Battery Capacity"
+    state_topic: "Mate3s/sysinfo/Battery_Capacity" 
+    unit_of_measurement: "AH"
+    
+  - platform: mqtt
+    name: "Mate3S Battery Type"
+    state_topic: "Mate3s/sysinfo/Battery_Type" 
+    
+# Inverter - Topic: Mate3s/ports0
+
+  - platform: mqtt
+    name: "Mate3s INV Dev"
+    state_topic: "Mate3s/ports0/Dev" 
+    
+  - platform: mqtt
+    name: "Mate3s INV Type"
+    state_topic: "Mate3s/ports0/Type" 
+    
+  - platform: mqtt
+    name: "Mate3s INV I L2"
+    state_topic: "Mate3s/ports0/Inv_I_L2" 
+    unit_of_measurement: "Amps"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV Chg I L2"
+    state_topic: "Mate3s/ports0/Chg_I_L2" 
+    unit_of_measurement: "Amps"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV Buy I L2"
+    state_topic: "Mate3s/ports0/Buy_I_L2" 
+    unit_of_measurement: "Amps"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV Sell I L2"
+    state_topic: "Mate3s/ports0/Sell_I_L2" 
+    unit_of_measurement: "Amps"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV VAC1 in L2"
+    state_topic: "Mate3s/ports0/VAC1_in_L2" 
+    unit_of_measurement: "Vac"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV VAC2 in L2"
+    state_topic: "Mate3s/ports0/VAC2_in_L2" 
+    unit_of_measurement: "Vac"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV VAC out L2"
+    state_topic: "Mate3s/ports0/VAC_out_L2" 
+    unit_of_measurement: "Vac"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV AC Input"
+    state_topic: "Mate3s/ports0/AC_Input" 
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV Batt V"
+    state_topic: "Mate3s/ports0/Batt_V" 
+    unit_of_measurement: "Vdc"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV AC mode"
+    state_topic: "Mate3s/ports0/AC_mode" 
+    unit_of_measurement: "Mode"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV mode"
+    state_topic: "Mate3s/ports0/INV_mode" 
+    unit_of_measurement: "Mode"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s INV AUX"
+    state_topic: "Mate3s/ports0/AUX"
+    
+
+# Charge Controller - Topic: Mate3s/ports1
+
+  - platform: mqtt
+    name: "Mate3s CC Dev"
+    state_topic: "Mate3s/ports1/Dev" 
+    
+  - platform: mqtt
+    name: "Mate3s CC Type"
+    state_topic: "Mate3s/ports1/Type" 
+    
+  - platform: mqtt
+    name: "Mate3s CC Out I"
+    state_topic: "Mate3s/ports1/Out_I" 
+    unit_of_measurement: "Amps"
+    force_update: true
+
+  - platform: mqtt
+    name: "Mate3s CC In I"
+    state_topic: "Mate3s/ports1/In_I" 
+    unit_of_measurement: "Amps"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s CC Batt V"
+    state_topic: "Mate3s/ports1/Batt_V" 
+    unit_of_measurement: "Vdc"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3S CC In V"
+    state_topic: "Mate3s/ports1/In_V" 
+    unit_of_measurement: "Vdc"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3S CC Out kWh"
+    state_topic: "Mate3s/ports1/Out_kWh" 
+    unit_of_measurement: "kWh"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3S CC Out AH"
+    state_topic: "Mate3s/ports1/Out_AH" 
+    unit_of_measurement: "AH"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s CC AUX"
+    state_topic: "Mate3s/ports1/AUX"
+    
+  - platform: mqtt
+    name: "Mate3S CC Mode"
+    state_topic: "Mate3s/ports1/CC_mode" 
+    unit_of_measurement: "Mode"
+    force_update: true
+    
+# FNDC - Topic: Mate3s/ports2
+
+  - platform: mqtt
+    name: "Mate3s FNDC Dev"
+    state_topic: "Mate3s/ports2/Dev" 
+    
+  - platform: mqtt
+    name: 'Mate3s FNDC Shunt A I'
+    state_topic: "Mate3s/ports2/Shunt_A_I" 
+    unit_of_measurement: "Adc"
+    force_update: true
+
+  - platform: mqtt
+    name: 'Mate3s FNDC Shunt A AH'
+    state_topic: "Mate3s/ports2/Shunt_A_AH" 
+    unit_of_measurement: "AH"
+    force_update: true
+    
+  - platform: mqtt
+    name: 'Mate3s FNDC Shunt A kWh'
+    state_topic: "Mate3s/ports2/Shunt_A_kWh" 
+    unit_of_measurement: "kWh"
+    force_update: true
+
+  - platform: mqtt
+    name: 'Mate3s FNDC Shunt B I'
+    state_topic: "Mate3s/ports2/Shunt_B_I" 
+    unit_of_measurement: "Adc"
+    force_update: true
+
+  - platform: mqtt
+    name: 'Mate3s FNDC Shunt B AH'
+    state_topic: "Mate3s/ports2/Shunt_B_AH" 
+    unit_of_measurement: "AH"
+    force_update: true
+    
+  - platform: mqtt
+    name: 'Mate3s FNDC Shunt B kWh'
+    state_topic: "Mate3s/ports2/Shunt_B_kWh" 
+    unit_of_measurement: "kWh"
+    force_update: true
+    
+  - platform: mqtt
+    name: 'Mate3s FNDC SOC'
+    state_topic: "Mate3s/ports2/SOC" 
+    unit_of_measurement: "%"
+    force_update: true
+
+  - platform: mqtt
+    name: 'Mate3s FNDC Min SOC'
+    state_topic: "Mate3s/ports2/Min_SOC" 
+    unit_of_measurement: "%"
+    force_update: true
+
+  - platform: mqtt
+    name: 'Mate3s FNDC Days since full'
+    state_topic: "Mate3s/ports2/Days_since_full" 
+    unit_of_measurement: "days"
+    force_update: true
+    
+  - platform: mqtt
+    name: 'Mate3s FNDC CHG parms met'
+    state_topic: "Mate3s/ports2/CHG_parms_met" 
+    
+  - platform: mqtt
+    name: 'Mate3s FNDC In AH today'
+    state_topic: "Mate3s/ports2/In_AH_today" 
+    unit_of_measurement: "AH"
+    force_update: true
+  
+  - platform: mqtt
+    name: 'Mate3s FNDC Out AH today'
+    state_topic: "Mate3s/ports2/Out_AH_today" 
+    unit_of_measurement: "AH"
+    force_update: true
+
+  - platform: mqtt
+    name: 'Mate3s FNDC In kWh today'
+    state_topic: "Mate3s/ports2/In_kWh_today" 
+    unit_of_measurement: "kWh"
+    force_update: true
+
+  - platform: mqtt
+    name: 'Mate3s FNDC Out kWh today'
+    state_topic: "Mate3s/ports2/Out_kWh_today" 
+    unit_of_measurement: "kWh"
+    force_update: true
+    
+  - platform: mqtt
+    name: 'Mate3s FNDC Net CFC AH'
+    state_topic: "Mate3s/ports2/Net_CFC_AH" 
+    unit_of_measurement: "AH"
+    force_update: true
+    
+  - platform: mqtt
+    name: 'Mate3s FNDC Net CFC kWh'
+    state_topic: "Mate3s/ports2/Net_CFC_kWh" 
+    unit_of_measurement: "kWh"
+    force_update: true
+    
+  - platform: mqtt
+    name: "Mate3s FNDC Batt V"
+    state_topic: "Mate3s/ports2/Batt_V" 
+    unit_of_measurement: "Vdc"
+    force_update: true
+
+  - platform: mqtt
+    name: "Mate3s FNDC Batt temp"
+    state_topic: "Mate3s/ports2/Batt_temp" 
+    unit_of_measurement: "degrees F"
+    force_update: true
+
+  - platform: mqtt
+    name: "Mate3s FNDC Aux mode"
+    state_topic: "Mate3s/ports2/Aux_mode" 
+    unit_of_measurement: "Mode"
+
+#
+# Some Customizations and updates for sensors above. 
+#
+
+    # Unfortunately, at this time, the CC string is blank when it is not silent, so 
+    # lets check for this and overload the string if it is blank. 
+  - platform: template
+    sensors:
+      mate3s_cc_mode_string:
+        friendly_name: Mate3s CC Mode String
+        unit_of_measurement: 'Mode'
+        value_template: >
+          {% set text_val = states('sensor.mate3s_cc_mode')  %}
+          {% if (text_val | length) <= 1  %}
+              Functioning
+          {%- else -%}
+            {{ text_val }}
+          {%- endif %}
+          
+   # Set the mode of how the battery system is
+   # Use the pv values, etc. 
+   # standby is in here - if hab_v + 0.10 >= cc_float_v (Charge Controller Float Value)
+   # we are typically off by .1 of a voalt. 
+   # and... 56.4 is both the float voltage (for hab / outback) and 
+   # it is also the "chaged value" of the battery. 
+   #
+   # Make sure you adjust the float voltage constant for your system. 
+   # Note to self: 
+   # {% if (fm100_v > hab_v) %}
+   #    Charging ( hab_v: {{ hab_v }} , hab_float_v, {{ hab_float_v}} , cc_float_v {{ cc_float_v }} )
+
+  - platform: template
+    sensors:
+      mate3s_batt_mode_string:
+        friendly_name: Mate3s Battery Mode String
+        unit_of_measurement: 'Mode'
+        value_template: >
+          {% set fm100_v = states('sensor.mate3s_cc_batt_v') | float(2) %}
+          {% set hab_v = states('sensor.mate3s_fndc_batt_v') | float(2) %}
+          {% set ac_load = states('sensor.mate3s_pv_load') | float(2) %}
+          {% set pv_out = states('sensor.mate3s_pv_watts') | float(2) %}
+          {% set cc_float_v = 56.4 %}
+          {% set hab_float_v = (hab_v + 0.1) | float(2) %}
+          
+          {% if (ac_load == 0.0) and (pv_out == 0) %}
+            Silent...
+          {%- else -%}
+
+            {% if (pv_out > 20.0) %}
+
+              {% if (ac_load > pv_out) %}
+                Discharging...
+              {%- else -%}
+                
+                {% if (pv_out < 75.0) %}
+
+                  {% if (pv_out > ac_load) %}
+                    Standby...
+                  {%- else -%}
+                    Discharging...
+                  {%- endif -%}
+
+                {%- else -%}
+
+                  {% if (hab_float_v >= cc_float_v) %}
+                    Standby... 
+                  {%- else -%}
+
+
+                    {% if (fm100_v >= hab_v) %}
+                      Charging...
+                    {%- else -%}
+                      Discharging...
+                    {%- endif -%}
+
+                  {%- endif -%}
+
+                {%- endif -%}
+
+
+              {%- endif -%}
+            {%- else -%}
+              Night - Discharging...
+            {%- endif -%}
+
+          {%- endif -%}
+          
+  # MPPT Modes of operation: (Three stage cycle)
+  # At least for Outback systems... this is very rudimentary!
+  #
+  # Sleeping (Zzzzz)
+  #             The PV Voltage is 2 volts less than the battery voltage. 
+  #
+  #             Charger state = Sleeping (Zzzzz)... 
+  #              if (sensor.mate3s_cc_in_v) < (sensor.mate3s_cc_batt_v - 2.0)
+  #
+  # Bulk
+  #            This is a Maximum Power Point Tracking mode which harvests the maximum wattage available
+  #            from the PV array. The controller is trying to regulate the battery voltage towards the
+  #            Absorbing voltage set point. Normally the charge controller enters this mode at the beginning
+  #            of the day or when a new charge cycle begins. The controller may also enter this stage if there
+  #            is not enough PV energy to maintain a different stage, such as Absorbing
+  #
+  #            Charger state = bulk
+  #             if (pv_amps > 5.0) and (hab_v < cc_float_v) %}
+  #              
+  #
+  # Absorb
+  #              Li batteries should never do absorb, 
+  #              But, if so, just have it absorb at 56.4
+  #
+  #              The battery voltage is held at a particular voltage... 
+  #              If the ChgT counter in the Misc menu counts up from zero toward the user-defined Absorb Time Limit.
+  #              Then The charger will exit this stage and enter the Float stage if the ChgT timer
+  #                reaches the time limit, or if the Absorb End Amps setting is reached. 
+  #
+  #
+  #              If the battery voltage drops below the Absorbing voltage 
+  #              then the FLEXmax reverts back to the Bulk charge stage and displays Float
+  #
+  #              I don't really have the counters, etc as variables, so this will be the exception state. 
+  #        
+  # Float - 
+  #                When battery is charged, but still daylight, etc. 
+  #                % if (hab_v == cc_float_v) 
+  #                   and (pv_amps < 5.0) 
+  #                   and (pv_soc > 99.0) %}
+  # 
+
+  - platform: template
+    sensors:
+      mate3s_cc_mppt_state_string:
+        friendly_name: Mate3s CC MPPT State String
+        unit_of_measurement: 'Mode'
+        value_template: >
+          {% set fm100_v = states('sensor.mate3s_cc_batt_v') | float(2) %}
+          {% set hab_v = states('sensor.mate3s_fndc_batt_v') | float(2) %}
+          {% set hab_soc = states('sensor.mate3s_fndc_soc') | float(2) %}
+          {% set ac_load = states('sensor.mate3s_pv_load') | float(2) %}
+          {% set pv_watts = states('sensor.mate3s_pv_watts') | float(2) %}
+          {% set pv_volts = states('sensor.mate3s_cc_in_v') | float(2) %}
+          {% set pv_amps = states('sensor.mate3s_cc_in_i') | float(2) %}
+          {% set cc_float_v = 56.4 %}
+
+          {% if (pv_volts < (hab_v - 2.0) | float(2) ) %}
+              Sleeping (Zzzzz)...
+          {%- else -%}
+            {% if (pv_amps > 4) and (hab_v < cc_float_v) and (hab_soc < 99.5) %}
+                Bulk
+            {%- else -%}
+              {% if (hab_v >= (cc_float_v - 0.4)) and (pv_amps <= 10.0) and (hab_soc > 99.0) %}
+                Float ({{ cc_float_v }} Vdc @ {{ pv_amps }} Amps)
+              {% else %}
+                {% if (hab_v < cc_float_v - 2.0) %}
+                  {% if (pv_volts < 80.0) and (pv_amps == 0.0) %}
+                    Silent (Dawn/Dusk/Storm)
+                  {% else %}
+                    Bulk (Clouds/Storm)
+                  {% endif %}
+                {% else %}
+                    Absorb (hab_v = {{ hab_v }}, pv_amps = {{ pv_amps }})
+                {% endif %}
+              {%- endif -%}
+            {% endif %}
+          {%- endif -%}
+
+

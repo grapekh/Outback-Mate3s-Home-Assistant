@@ -1,0 +1,515 @@
+  #######################
+  # Sensors for Shelly EM
+  # Get data from em_data.csv file:
+  # Format:
+  # Date/time UTC,Active energy Wh,Returned energy Wh,Min V,Max V
+  # 2020-08-18 01:18,0.00,0.05,121.0,121.0
+  # 2020-08-18 01:19,0.00,1.01,119.5,121.0
+  # 2020-08-18 01:20,0.00,1.02,121.0,121.0
+  ########################
+  #
+  # Shelly EM: MQTT
+  # When configured for MQTT Shelly EM reports data on:
+  # 
+  # shellies/shellyem-<deviceid>/emeter/<i>/energy              energy counter in Watt-minute
+  # shellies/shellyem-<deviceid>/emeter/<i>/returned_energy     energy returned to the grid in Watt-minute
+  # shellies/shellyem-<deviceid>/emeter/<i>/total               total energy in Wh (accumulated in device's non-volatile memory)
+  # shellies/shellyem-<deviceid>/emeter/<i>/total_returned      total energy returned to the grid in Wh (accumulated in device's non-volatile memory)
+  # shellies/shellyem-<deviceid>/emeter/<i>/power               instantaneous active power in Watts
+  # shellies/shellyem-<deviceid>/emeter/<i>/reactive_power      instantaneous reactive power in Watts
+  # shellies/shellyem-<deviceid>/emeter/<i>/voltage grid        voltage in Volts
+  # shellies/shellyem-<deviceid>/relay/0 reports status: on, off or overpower
+  #
+  # Note, that energy and returned_energy do not survive power cycle or reboot -- 
+  # this is how the value is implemented on other Shellies. 
+  # Shelly EM features a persisted version which is not affected by power cycling or lack of connectivity. 
+  # To get the persisted counters use total and total_returned.
+  # 
+  # Commands are accepted on:
+  # 
+  # shellies/shellyem-<deviceid>/relay/0/command                accepts on, off or toggle
+  # shellies/shellyem-<deviceid>/emeter/<i>/command             accepts message reset_totals to reset total and total_returned energy counters to 0
+  # shellies/shellyem-<deviceid>/command                        accepts message reset_data to reset all device data
+  #
+  # Shelly EM: /relay/0
+  # GET /relay/0
+  # 
+  # {
+  #     "ison": false,
+  #     "has_timer": false,
+  #     "timer_started": 0,
+  #     "timer_duration": 0,
+  #     "timer_remaining": 0,
+  #     "overpower": false,
+  #     "is_valid": true,
+  #     "source": "http"
+  # }
+  # Returns the state of the internal relay. 
+  #
+  # Attributes
+  # Attribute	    Type	Description
+  # ison	        bool	Whether the channel is turned ON or OFF
+  # has_timer	    bool	Whether a timer is currently armed for this channel
+  # timer_started	number	Unix timestamp of timer start; 0 if timer inactive or time not synced
+  # timer_duration	number	Timer duration, s
+  # timer_remaining	number	experimental If there is an active timer, shows seconds until timer elapses; 0 otherwise
+  # overpower	    bool	Whether an overpower condition has occurred
+  # is_valid	    bool	Whether power result is valid
+  # source	        string	Source of the last relay command
+  # 
+  # Shelly EM: /emeter/{index}
+  # GET /emeter/0
+  # 
+  # {
+  #     "power": 0,
+  #     "reactive": 0,
+  #     "voltage": 0,
+  #     "is_valid": true,
+  #     "total": 0,
+  #     "total_returned": 0
+  # }
+  # Attributes
+  # Attribute	    Type	Description
+  # power	        number	Instantaneous power, Watts
+  # reactive	    number	Instantaneous reactive power, Watts
+  # voltage	        number	RMS voltage, Volts
+  # is_valid	    bool	Whether the associated meter is functioning properly
+  # total	        number	Total consumed energy, Wh
+  # total_returned	number	Total returned energy, Wh
+  # 
+  #
+  # Shelly EM: /emeter/{index}/em_data.csv
+  # This provides an export of the data gathered by the device. For each measurement channel, 
+  # a CSV file is generated with the following columns:
+  # 
+  # Date/time UTC
+  # Active energy Wh
+  # Returned energy Wh
+  # Min V
+  # Max V
+  # This will always contain data for the entire time range stored on the device.
+  #
+  #######################################################################################################
+  
+  
+ 
+  #######################################################################################################
+   ## MQTT SENSORS - Coming from the Shelley Flood (topic: shelleyem-flood1) - The Office - 10.1.10.84
+   #######################################################################################################
+ 
+#  - platform: mqtt
+#    state_topic: "shellies/shellyflood-6123D5/...."
+#
+
+  - platform: mqtt
+    name: "Flood 1 Online"
+    state_topic: "shellies/shellyflood-6123D5/online" 
+    force_update: true
+    unit_of_measurement: "State"
+
+  - platform: mqtt
+    name: "Flood 1 Temperature"
+    state_topic: "shellies/shellyflood-6123D5/sensor/temperature" 
+    force_update: true
+    unit_of_measurement: "°F"
+    
+  - platform: mqtt
+    name: "Flood 1 Battery"
+    state_topic: "shellies/shellyflood-6123D5/sensor/battery" 
+    force_update: true
+    unit_of_measurement: "%"
+    
+  - platform: mqtt
+    name: "Flood 1 Error"
+    state_topic: "shellies/shellyflood-6123D5/sensor/error" 
+    force_update: true
+    unit_of_measurement: "errors"
+    
+  - platform: mqtt
+    name: "Flood 1 Reasons"
+    state_topic: "shellies/shellyflood-6123D5/sensor/act_reasons" 
+    force_update: true
+    unit_of_measurement: "reason"
+    
+  - platform: mqtt
+    name: "Flood 1 Wet Value"
+    state_topic: "shellies/shellyflood-6123D5/sensor/flood"
+    force_update: true
+    unit_of_measurement: "wet"
+
+  #######################################################################################################
+   ## MQTT SENSORS - Coming from the Shelley EM (topic: shelleyem-B93F2) - The Office - 10.1.10.136
+   #######################################################################################################
+
+
+#  - platform: mqtt
+#    state_topic: "shellies/shellyem-B9E3F3/emeter/...."
+#    name: "Phase 0 .."
+#    force_update: true
+#    value_template: "{{ value_json.time }}"
+#    unit_of_measurement: DateTime
+
+
+
+
+  - platform: mqtt
+    name: "Phase 0 Power Now"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/0/power" 
+    force_update: true
+    unit_of_measurement: "Watts"
+
+  - platform: mqtt
+    name: "Phase 0 Reactive Power"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/0/reactive_power" 
+    unit_of_measurement: "Watts"
+    
+  - platform: mqtt
+    name: "Phase 0 Total"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/0/total" 
+    force_update: true
+    unit_of_measurement: "Watts"
+    
+
+  - platform: mqtt
+    name: "Phase 0 Voltage"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/0/voltage" 
+    force_update: true
+    unit_of_measurement: "Volts"
+
+  - platform: mqtt
+    name: "Phase 0 Total Returned"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/0/total_returned" 
+    unit_of_measurement: "Watts"
+    
+  - platform: mqtt
+    name: "Phase 1 Power Now"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/1/power" 
+    force_update: true
+    unit_of_measurement: "Watts"
+     
+  - platform: mqtt
+    name: "Phase 1 Reactive Power"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/1/reactive_power" 
+    unit_of_measurement: "Watts"
+    
+  - platform: mqtt
+    name: "Phase 1 Total"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/1/total" 
+    force_update: true
+    unit_of_measurement: "Watts"
+    
+  - platform: mqtt
+    name: "Phase 1 Voltage"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/1/voltage" 
+    force_update: true
+    unit_of_measurement: "Volts"
+
+  - platform: mqtt
+    name: "Phase 1 Total Returned"
+    state_topic: "shellies/shellyem-B9E3F3/emeter/1/total_returned" 
+    unit_of_measurement: "Watts"
+    
+    
+  ## Set up the templates - calculations based on values above. 
+
+  # Get phase 0 and phase 1 power now, but absolute value
+  # Sometimes, the number are negative, which is perplexing. 
+  #
+  - platform: template
+    sensors:
+      shelly_phase_0_w:
+        friendly_name: "Phase 0 Watts"
+        unit_of_measurement: 'Watts'
+        value_template: >
+          {% set phase0w = float(states('sensor.phase_0_power_now')) | abs %}
+          {{ float(phase0w) | round(2) }}
+          
+  - platform: template
+    sensors:
+      shelly_phase_1_w:
+        friendly_name: "Phase 1 Watts"
+        unit_of_measurement: 'Watts'
+        value_template: >
+          {% set phase1w = float(states('sensor.phase_1_power_now')) | abs %}
+          {{ float(phase1w) | round(2) }}
+          
+
+  # Calculate Total Power Now
+  - platform: template
+    sensors:
+      sum_power_now:
+        friendly_name: "Total Power Now"
+        unit_of_measurement: 'Watts'
+        value_template: >
+          {% set phase0w = float(states('sensor.phase_0_power_now')) | abs %}
+          {% set phase1w = float(states('sensor.phase_1_power_now')) | abs %}
+          {{ (float(phase0w) + float(phase1w)) | round(2) }}
+          
+          
+  # Calculate kWh power from WH power now on each phase and total. 
+  - platform: template
+    sensors: 
+      shelly_phase_0_kw_now:
+        friendly_name: "Shelly Phase 0 kWh Now"
+        unit_of_measurement: "kW"
+        value_template: >
+           {% set phase0kwh = float(states('sensor.phase_0_power_now')) | abs / 1000.0 %}
+           {{ phase0kwh | round(3) }}
+           
+  - platform: template
+    sensors: 
+      shelly_phase_1_kw_now:
+        friendly_name: "Shelly Phase 1 kWh Now"
+        unit_of_measurement: "kW"
+        value_template: >
+           {% set phase1kwh = float(states('sensor.phase_1_power_now')) | abs / 1000.0 %}
+           {{ phase1kwh | round(3) }}
+
+  - platform: template
+    sensors:
+      shelly_total_power_now:
+        friendly_name: "Shelly Total Energy Now"
+        unit_of_measurement: 'kW'
+        value_template: >
+          {% set phase0kw = float(states('sensor.shelly_phase_0_kw_now')) | abs %}
+          {% set phase1kw = float(states('sensor.shelly_phase_1_kw_now')) | abs %}
+          {{ float(phase0kw) + float(phase1kw) | round(3) }}
+   
+  # Lets set up some other little sensors for energy
+  # Calculate AMP Draw on panel and the like
+  
+  - platform: template
+    sensors:
+      phase0_amps:
+        friendly_name: Phase 0 Amps Now
+        unit_of_measurement: Amps
+        value_template: >
+            {% set vltg0 = states('sensor.phase_0_voltage') %}
+            {% set phase0w = float(states('sensor.phase_0_power_now')) | abs %}
+            {% set phase0ampsnow =  (float(phase0w) / float(vltg0))  %}
+            {{ phase0ampsnow | round (2) }}
+
+  - platform: template
+    sensors:
+      phase1_amps:
+        friendly_name: Phase 1 Amps Now
+        unit_of_measurement: Amps
+        value_template: >
+            {% set vltg1 = states('sensor.phase_1_voltage') %}
+            {% set phase1w = float(states('sensor.phase_1_power_now')) | abs %}
+            {% set phase1ampsnow =  (float(phase1w) / float(vltg1))  %}
+            {{ phase1ampsnow | round (2) }}
+
+
+  - platform: template
+    sensors:
+      sum_office_amps:
+        friendly_name: Total Amps Now
+        unit_of_measurement: Amps
+        value_template: >
+          {% set vltg0 = states('sensor.phase_0_voltage') %}
+          {% set vltg1 = states('sensor.phase_1_voltage') %}
+          {% set meanvltg = (float(vltg0) + float(vltg1)) / 2.0 %} 
+          {% set phase0w = float(states('sensor.phase_0_power_now')) | abs %}
+          {% set phase1w = float(states('sensor.phase_1_power_now')) | abs %}
+          {% set wattsnow = float(phase0w) + float(phase1w) %}
+  
+          {% set totalampsnow =  (float(wattsnow) / float(meanvltg))  %}
+          {{ totalampsnow | round (2) }}
+  
+  # Get some attributes from the utility meter
+  - platform: template
+    sensors:
+      shelly_last_hour_kwh:
+        friendly_name: Shelly Last Hour kWh
+        unit_of_measurement: kWh
+        value_template: >
+          {{ state_attr("sensor.shelly_hourly_kwh", "last_period") | round(2) }}
+
+  - platform: template
+    sensors:
+      shelly_yesterday_kwh:
+        friendly_name: Shelly Yesterday kWh
+        unit_of_measurement: kWh
+        value_template: >
+          {{ state_attr("sensor.shelly_daily_kwh", "last_period") | round(2) }}
+ 
+  # Lets calculate some pricing information so we can display on different dashboards
+  # In my case, eveyrthing is on peak (in fact it is discounted at $0.0825 / kwh, so hard code it)
+  # For on peak and off peak pricing, use the utility meter with tarrifs.  This is simple
+
+  - platform: template
+    sensors:
+      shelly_on_peak_kwh_cost:
+        friendly_name: On Peak KWH Cost
+        unit_of_measurement: '$'
+        value_template: >
+            {% set on_peak_kwh_cost = "0.08125" %}
+            {{ on_peak_kwh_cost | round(2) }}
+            
+  - platform: template
+    sensors:
+      shelly_office_cash_today:
+        friendly_name: Office Cash Today Thus Far
+        unit_of_measurement: '$'
+        value_template: >
+          {% set on_peak_kwh_cost = states('sensor.shelly_on_peak_kwh_cost') %}
+          {% set num_kwh = states('sensor.shelly_kwh_24hr') %}
+          {% set price = (float(num_kwh) * float(on_peak_kwh_cost)) %}
+          {{ price | round(2) }}
+
+  - platform: template
+    sensors:
+      shelly_office_cash_yesterday:
+        friendly_name: Office Cash Yesterday
+        unit_of_measurement: '$'
+        value_template: >
+          {% set on_peak_kwh_cost = states('sensor.shelly_on_peak_kwh_cost') %}
+          {% set num_kwh = states('sensor.shelly_yesterday_kwh') %}
+          {% set price = (float(num_kwh) * float(on_peak_kwh_cost)) %}
+          {{ price | round(2) }}
+
+  - platform: template
+    sensors:
+      shelly_cash_this_hour:
+        friendly_name: Shelly Cash This Hour
+        unit_of_measurement: "$"
+        value_template: >
+          {% set on_peak_kwh_cost = states('sensor.shelly_on_peak_kwh_cost') %}
+          {% set num_kwh = states('sensor.shelly_kwh_1hr') %}
+          {% set sh_price = (float(num_kwh) * float(on_peak_kwh_cost)) %}
+          
+          {{ sh_price | round(2) }}
+
+   # This is not going to be right - we are looking at kw, not kwh... 
+   # Revamp this. .. . 
+  - platform: template
+    sensors:
+      shelly_cash_last_hour:
+        friendly_name: Shelly Cash Last Hour
+        unit_of_measurement: "$"
+        value_template: >
+          {% set on_peak_kwh_cost = states('sensor.shelly_on_peak_kwh_cost') %}
+          {% set num_kw = state_attr("sensor.shelly_hourly_kw", "last_period") | round(2) %}
+          {% set sh_price = (float(num_kw) * float(on_peak_kwh_cost)) %}
+          
+          {{ sh_price | round(2) }}
+          
+  - platform: template
+    sensors:
+      shelly_mean_voltage:
+        friendly_name: Shelly_Mean_Voltage_Now
+        unit_of_measurement: Volts
+        value_template: >
+          {% set vltg0 = states('sensor.phase_0_voltage') %}
+          {% set vltg1 = states('sensor.phase_1_voltage') %}
+  
+          {% set MeanVolts = (float(vltg0) + float(vltg1)) / 2.0  %}
+          {{ MeanVolts | round (2) }}
+          
+
+###########################################################
+# Lets try to calculate some KW and KWH Measurements. 
+###########################################################
+
+  # The power factor of an AC circuit is defined as the ratio of the real 
+  # power (W) consumed by a circuit to the apparent power (VA) consumed by 
+  # the same circuit. This therefore gives us: Power Factor = Real 
+  # Power/Apparent Power, or p.f. = W/VA
+  #
+  # For our purposes here, we're just going to hard code the power factor 
+  # as 0.95, which may or may not be correct, but it is close enough
+  # for rounding errors which make sense.
+  #
+  - platform: template
+    sensors: 
+      shelly_kw: 
+        friendly_name: "Shelly Kw"
+        unit_of_measurement: 'Kw'
+        
+        # Note, these values are in watts, so they are off by 1000. 
+        # at the end, divide by 1000 to get the actual number of kw's. 
+        value_template: >
+          {% set PF = 0.95 %}
+          {% set V = states('sensor.shelly_mean_voltage') %}
+          {% set A = states('sensor.sum_office_amps') %}
+          {% set E = ((PF * float(A) * float(V)) / 1000.0) %}
+          
+          {{ E | round(3) }}
+          
+    # Lets calculate KWh
+    # This is tougher as it will require us to keep track of our total usage
+    # for an entire hour.  The following is the instantenous measurement, 
+    # assuming constant load over the wholehour, it's simple enough. 
+    # 
+    # But that is the trick - the load won't be the same for the whole hour. 
+    # Regardless this is just instantenous kwh (a nice thing to graph)
+    # E (kWh) = P (W) x t (HR) / 1000
+    #
+    # Anyway, here is one easy calculation 
+    # 
+  - platform: template
+    sensors: 
+      shelly_kwh:
+        friendly_name: shelly kWh
+        unit_of_measurement: 'kWh'
+        value_template: >
+          {% set kwh = float(states('sensor.shelly_kw'))  / 1000.0 %}  
+          {{ kwh | round(2) }} 
+          
+    # Using the Statistics sensor for HA, we can get more meaningful kWh 
+    # value as we can use the average kw over the entire last 24 hours. 
+    #
+  - platform: statistics
+    name: shelly_kw_daily_stats
+    entity_id: sensor.shelly_kw
+    sampling_size: 100
+    max_age:
+      hours: 24
+      
+  - platform: statistics
+    name: shelly_kw_hourly_stats
+    entity_id: sensor.shelly_kw
+    sampling_size: 60
+    max_age:
+      hours: 1
+      
+  #
+  # Now that we are collecting statistics regarding kw, etc 
+  # We can calculate the actual 1 hour average or 24 hour average 
+  #
+  # Lets do 1 day (24 hours)
+  - platform: template
+    sensors: 
+      shelly_kwh_24hr:
+        friendly_name: Shelly kWH 24 hours
+        unit_of_measurement: kWh
+        
+        # Note, we get these by watt hrs from shelly, not kwh, so don't divide by 1000
+        value_template: >
+          {% set mean_value = state_attr('sensor.shelly_kw_daily_stats', 'mean') %}
+          {% set kwh24hr = (float(mean_value) * 24.0) %}
+          {{ kwh24hr | round (2) }}
+          
+  # Lets do 1 hour 
+  - platform: template
+    sensors: 
+      shelly_kwh_1hr:
+        friendly_name: Shelly kWH 1 hour
+        unit_of_measurement: kWh
+        
+        # Note, we get these by watt hrs from shelly, not kwh, so don't divide by 1000
+        value_template: >
+          {% set mean_value = state_attr('sensor.shelly_kw_hourly_stats', 'mean') %}
+          {% set kwh1hr = float(mean_value) %}
+          {{ kwh1hr | round (4) }}
+
+  # So, they say that the trapezoidal calculation for kwh is better. 
+  # Lets try that and compare
+  - platform: integration
+    source: sensor.shelly_kw
+    name: Shelly Energy Spent
+    unit_prefix: k
+    method: trapezoidal
+    round: 2
+
