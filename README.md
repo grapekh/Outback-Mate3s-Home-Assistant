@@ -8,9 +8,9 @@ I'll be adding help information, images, and so on when I have some time.
 For now, here are a couple of screenshots. 
 The Grafana Dashboard:
 
-![Screenshot](screenshots/grafana_view.png)
+![Screenshot](./grafana_view.png)
 
 The Lovelace view into the same data: 
 
-![Screenshot](screenshots/lovelave_view.png)
+![Screenshot](./lovelave_view.png)
 
